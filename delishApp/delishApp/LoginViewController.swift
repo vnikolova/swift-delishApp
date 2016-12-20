@@ -56,13 +56,15 @@ class LoginViewController: UIViewController {
                         let email = (record?.value(forKey: "email"))!
                         //add user defaults for logged in
                         UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
+                        //store email to defaults
+                        UserDefaults.standard.set(userEmail, forKey: "user")
                         UserDefaults.standard.synchronize()
                         print("Found user: \(email)")
                         
                         //redirect to main view
                         self.dismiss(animated: true, completion: nil)
                         self.performSegue(withIdentifier: "unwindToMain", sender: self)
-
+                        
                         
                     } else {
                         print("no such user found. Don't give up.")

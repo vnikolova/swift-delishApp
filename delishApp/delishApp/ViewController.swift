@@ -10,9 +10,13 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var userLbl: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        //get user email and display
+        let user = UserDefaults.standard.string(forKey: "user");
+        userLbl.text = user
     }
 
     override func didReceiveMemoryWarning() {

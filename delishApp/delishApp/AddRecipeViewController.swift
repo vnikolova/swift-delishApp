@@ -7,20 +7,55 @@
 //
 
 import UIKit
+import RealmSwift
 
 class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var titleText: UITextField!
+    @IBOutlet weak var timeText: UITextField!
+    var label = "";
+    var totalRecipes = 5;
     
+    @IBAction func stepperTapped(_ sender: UIStepper) {
+        timeText.text! = "\(Int(sender.value))"
+    }
+    
+    @IBAction func proteinSwitch(_ sender: UISwitch) {
+        if(sender.isOn == true){
+            label = "High Protein"
+        }
+    }
+    @IBAction func fatSwitch(_ sender: UISwitch) {
+        if(sender.isOn == true){
+            label = "Low Fat"
+        }
+    }
+    @IBAction func carbSwitch(_ sender: UISwitch) {
+        if(sender.isOn == true){
+            label = "Low Carb"
+        }
+    }
     @IBAction func cancelButtonTapped(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
         //get all info
+        let newRecipe = Recipe()
+        newRecipe.id = totalRecipes+1;
+        newRecipe.title = titleText.text!
+        newRecipe.time = Int(timeText.text!)!
+        newRecipe.label = label
+        newRecipe.imageURL = "defaultImage"
+        totalRecipes += 1
+        //save to realm
+        let realm = try! Realm()
         
-        //save to a file
-        
+        try! realm.write {
+            realm.add(newRecipe)
+            print("new recipe created: \(newRecipe.title)")
+        }
         //dismiss
         dismiss(animated: true, completion: nil)
     }
@@ -46,6 +81,7 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //set up dropdown menu
@@ -55,7 +91,6 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
     /*
     // MARK: - Navigation
